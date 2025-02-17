@@ -33,7 +33,6 @@
     "npm": ">=8"
   },
   "dependencies": {
-    "commander": "^13.1.0",
     "dayjs": "^1.11.13",
     "tslib": "^2.8.1"
   }
