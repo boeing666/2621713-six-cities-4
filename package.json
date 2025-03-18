@@ -12,6 +12,7 @@
     "mock-server": "json-server ./mocks/mock-server-data.json --port 1234",
     "cli": "npm run build && node ./dist/main-cli.js",
     "start": "npm run build && node ./dist/main.js",
+    "start:dev": "npm run ts ./dist/main.rest.js | pino-pretty --colorize --translateTime SYS:standard",
     "build": "npm run clean && npm run compile",
     "lint": "eslint src/ --ext .ts",
     "compile": "tsc -p tsconfig.json",
