@@ -17,7 +17,7 @@ export type Offer = {
   roomsCount: number;
   guestCount: number;
   rentalCost: number;
-  facilities: Facilities;
+  facilities: Facilities[];
   user: User;
   commentsCount: number;
   coordinates: [number, number];

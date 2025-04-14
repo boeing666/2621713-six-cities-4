@@ -17,8 +17,8 @@ export function createOffer(offerData: string): Offer {
     rentalCost,
     facilities,
     username,
-    email,
-    avatarPath,
+    mail,
+    avatar,
     userType,
     commentsCount,
     coordinates
@@ -26,10 +26,9 @@ export function createOffer(offerData: string): Offer {
 
   const user: User = {
     name: username,
-    email,
-    avatarPath,
+    mail,
+    avatar,
     type: UserType[userType as keyof typeof UserType] ?? undefined,
-    password: ''
   };
 
   return {
@@ -46,7 +45,7 @@ export function createOffer(offerData: string): Offer {
     roomsCount: Number(roomsCount),
     guestCount: Number(guestCount),
     rentalCost: Number(rentalCost),
-    facilities: facilities as Facilities,
+    facilities: facilities.split('; ').map((facility) => Facilities[facility as keyof typeof Facilities]) ?? [],
     user,
     commentsCount: Number(commentsCount),
     coordinates: coordinates.split('; ').map(Number) as [number, number]
