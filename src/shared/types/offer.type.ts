@@ -1,24 +1,26 @@
-import {City} from './city.enum.js';
-import {HouseType} from './house-type.enum.js';
-import {Facilities} from './facilities.type.js';
-import {User} from './user.type.js';
+import { City } from './city.enum.js';
+import { HouseType } from './house-type.enum.js';
+import { Amenity } from './facilities.type.js';
+import { User } from './user.type.js';
+import { Coordinates } from './coordinates.js';
 
 export type Offer = {
   title: string;
   description: string;
-  postDate: Date;
+  image: string;
+  date: Date;
+  cost: number;
   city: City;
-  previewPath: string;
-  imagePaths: string[];
+  gallery: string[];
   isPremium: boolean;
-  isFavorites: boolean;
+  isFavorite: boolean;
   rating: number;
-  houseType: HouseType;
-  roomsCount: number;
+  apartmentType: HouseType;
+  roomCount: number;
   guestCount: number;
-  rentalCost: number;
-  facilities: Facilities[];
-  user: User;
+  amenities: Amenity[];
+  owner: User;
   commentsCount: number;
-  coordinates: [number, number];
+  coordinates: Coordinates;
 }
+

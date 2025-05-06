@@ -13,24 +13,30 @@ export interface UserEntity extends defaultClasses.Base {}
 @modelOptions({
   schemaOptions: {
     collection: 'users',
+    timestamps: true,
   },
 })
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class UserEntity extends defaultClasses.TimeStamps implements User {
-  @prop({ unique: true, required: true })
+  @prop({
+    type: String,
+    match: [/^([\w-\\.]+@([\w-]+\.)+[\w-]{2,4})?$/, 'Email is incorrect'],
+    required: true,
+    unique: true,
+  })
   public mail: string;
 
-  @prop({ required: false, default: '' })
+  @prop({ required: false, default: '', type: String, nullable: true })
   public avatar: string | null;
 
-  @prop({ required: true, default: '' })
+  @prop({ required: true, default: '', type: String })
   public name: string;
 
-  @prop({ required: true, default: '' })
+  @prop({ required: true, default: '', type: String })
   private password?: string;
 
-  @prop({ required: true, default: UserType.Base })
+  @prop({ required: true, type: String, default: UserType.Base })
   public type: UserType;
 
   constructor(userData: User) {

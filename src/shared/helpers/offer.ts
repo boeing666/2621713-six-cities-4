@@ -1,4 +1,12 @@
-import {City, Facilities, HouseType, Offer, User, UserType} from '../types/index.js';
+import {
+  City,
+  Amenity,
+  HouseType,
+  Offer,
+  User,
+  UserType,
+  Coordinates
+} from '../types/index.js';
 
 export function createOffer(offerData: string): Offer {
   const [
@@ -15,14 +23,19 @@ export function createOffer(offerData: string): Offer {
     roomsCount,
     guestCount,
     rentalCost,
-    facilities,
+    amenities,
     username,
     mail,
     avatar,
     userType,
     commentsCount,
-    coordinates
+    rawCoordinates
   ] = offerData.replace('\n', '').split('\t');
+
+  const coordinates: Coordinates = {
+    latitude: Number(rawCoordinates.split(';')[0]),
+    longitude: Number(rawCoordinates.split(';')[1]),
+  };
 
   const user: User = {
     name: username,
@@ -34,20 +47,20 @@ export function createOffer(offerData: string): Offer {
   return {
     title,
     description,
-    postDate: new Date(postDate),
-    city: City[city as keyof typeof City] ?? undefined,
-    previewPath,
-    imagePaths: imagePaths.split('; '),
+    date: new Date(postDate),
+    city: City[city as keyof typeof City] ?? City.Paris,
+    image: previewPath,
+    gallery: imagePaths.split(','),
     isPremium: isPremium === 'true',
-    isFavorites: isFavorites === 'true',
+    isFavorite: isFavorites === 'true',
     rating: Number(rating),
-    houseType: HouseType[houseType as keyof typeof HouseType] ?? undefined,
-    roomsCount: Number(roomsCount),
+    apartmentType: HouseType[houseType as keyof typeof HouseType] ?? HouseType.apartment,
+    roomCount: Number(roomsCount),
     guestCount: Number(guestCount),
-    rentalCost: Number(rentalCost),
-    facilities: facilities.split('; ').map((facility) => Facilities[facility as keyof typeof Facilities]) ?? [],
-    user,
+    cost: Number(rentalCost),
+    amenities: amenities.split(';') as Amenity[],
+    owner: user,
     commentsCount: Number(commentsCount),
-    coordinates: coordinates.split('; ').map(Number) as [number, number]
+    coordinates: coordinates
   };
 }

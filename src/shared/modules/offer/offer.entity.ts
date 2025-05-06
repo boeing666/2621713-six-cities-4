@@ -6,72 +6,85 @@ import {
   Ref,
 } from '@typegoose/typegoose';
 
-import { City, HouseType, Facilities } from '../../types/index.js';
+import {
+  City,
+  HouseType,
+  Amenity,
+  Coordinates as CoordinatesType
+} from '../../types/index.js';
+
 import { UserEntity } from '../user/user.entity.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface OfferEntity extends defaultClasses.Base {}
 
+class Coordinates implements CoordinatesType {
+  @prop({ required: true, type: Number })
+  public latitude!: number;
+
+  @prop({ required: true, type: Number })
+  public longitude!: number;
+}
+
 @modelOptions({
   schemaOptions: {
     collection: 'offers',
+    timestamps: true,
   },
 })
+
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class OfferEntity extends defaultClasses.TimeStamps {
-  @prop({ trim: true, required: true })
+  @prop({ trim: true, required: true, type: String })
   public title!: string;
 
-  @prop({ trim: true })
+  @prop({ trim: true, type: String })
   public description!: string;
 
-  @prop()
+  @prop({ type: String })
   public image!: string;
 
-  @prop()
+  @prop({ type: Date })
   public date!: Date;
 
-  @prop()
+  @prop({ type: Number })
   public cost!: number;
 
-  @prop({
-    type: () => String,
-    enum: City,
-  })
-  public town!: City;
+  @prop({ type: String, enum: City })
+  public city!: City;
 
-  @prop()
+  @prop({ type: [String] })
   public gallery!: string[];
 
-  @prop()
+  @prop({ type: Boolean })
   public isPremium!: boolean;
 
-  @prop()
+  @prop({ type: Boolean })
   public isFavorite!: boolean;
 
-  @prop()
+  @prop({ type: Number })
   public rating!: number;
 
-  @prop({
-    type: () => String,
-    enum: HouseType,
-  })
-  public apartmentType!: HouseType;
+  @prop({ type: String, enum: HouseType })
+  public type!: HouseType;
 
-  @prop()
-  public roomCount!: number;
+  @prop({ type: Number })
+  public roomsCount!: number;
 
-  @prop()
+  @prop({ type: Number })
   public guestCount!: number;
 
-  @prop()
-  public amenities!: Facilities[];
+  @prop({ type: [String], enum: Amenity })
+  public amenities!: Amenity[];
 
-  @prop({
-    ref: UserEntity,
-    required: true,
-  })
-  public userId!: Ref<UserEntity>;
+  @prop({ ref: UserEntity, required: true })
+  public owner!: Ref<UserEntity>;
+
+  @prop({ type: Number, required: true, default: 0 })
+  public commentsCount: number;
+
+  @prop({ type: () => Coordinates, required: true, _id: false })
+  public coordinates: Coordinates;
 }
 
 export const OfferModel = getModelForClass(OfferEntity);

@@ -1,18 +1,19 @@
 import { Command } from './interface.js';
-import {TsvFileReader} from '../../shared/libs/file-reader/index.js';
-import {createOffer, getErrorMessage} from '../../shared/helpers/index.js';
+import { TsvFileReader } from '../../shared/libs/file-reader/index.js';
+import { createOffer, getErrorMessage, getMongoURI } from '../../shared/helpers/index.js';
 import { UserService } from '../../shared/modules/user/user-service.interface.js';
 import { DatabaseClient } from '../../shared/libs/database-client/database-client.interface.js';
 import { Logger } from '../../shared/libs/logger/logger.interface.js';
 import { ConsoleLogger } from '../../shared/libs/logger/console.logger.js';
-import { OfferService } from '../../shared/modules/offer/offer-service.interface.js';
 import { DefaultOfferService } from '../../shared/modules/offer/default-offer.service.js';
-import { OfferModel } from '../../shared/modules/offer/offer.entity.js';
 import { DefaultUserService } from '../../shared/modules/user/default-user.service.js';
 import { UserModel } from '../../shared/modules/user/user.entity.js';
 import { MongoDatabaseClient } from '../../shared/libs/database-client/mongo.database-client.js';
-import { getMongoURI } from '../../shared/helpers/database.js';
 import { Offer } from '../../shared/types/index.js';
+import { CommentModel } from '../../shared/modules/comment/comment.entity.js';
+import { FavoriteModel } from '../../shared/modules/favorite/favorite.entity.js';
+import { OfferModel, OfferService } from '../../shared/modules/offer/index.js';
+import { DEFAULT_USER_PASSWORD } from './command.constant.js';
 
 export default class ImportCommand implements Command {
   private userService: UserService;
@@ -26,7 +27,7 @@ export default class ImportCommand implements Command {
     this.onCompleteImport = this.onCompleteImport.bind(this);
 
     this.logger = new ConsoleLogger();
-    this.offerService = new DefaultOfferService(this.logger, OfferModel);
+    this.offerService = new DefaultOfferService(this.logger, OfferModel, FavoriteModel, CommentModel);
     this.userService = new DefaultUserService(this.logger, UserModel);
     this.databaseClient = new MongoDatabaseClient(this.logger);
   }
@@ -36,31 +37,15 @@ export default class ImportCommand implements Command {
 
     const user = await this.userService.findOrCreate(
       {
-        ...offer.user,
-        password: '123456',
+        ...offer.owner,
+        password: DEFAULT_USER_PASSWORD,
       },
       this.salt
     );
 
     console.info(`User ${user.mail} was created`);
 
-    await this.offerService.create({
-      userId: user.id,
-      title: offer.title,
-      description: offer.description,
-      image: offer.previewPath,
-      date: offer.postDate,
-      cost: offer.rentalCost,
-      town: offer.city,
-      gallery: offer.imagePaths,
-      isPremium: offer.isPremium,
-      isFavorite: offer.isFavorites,
-      rating: offer.rating,
-      apartmentType: offer.houseType,
-      roomCount: offer.roomsCount,
-      guestCount: offer.guestCount,
-      amenities: offer.facilities,
-    });
+    await this.offerService.create({ ...offer, owner: user });
   }
 
   public getName(): string {

@@ -5,13 +5,15 @@ import {
   Coordinates,
   User
 } from '../../../types/index.js';
-export class CreateOfferDto {
+
+export class OfferResponseDto {
+  id!: string;
   title!: string;
   description!: string;
   image!: string;
   date!: Date;
   cost!: number;
-  city!: City;
+  town!: City;
   gallery!: string[];
   isPremium!: boolean;
   isFavorite!: boolean;
@@ -20,7 +22,6 @@ export class CreateOfferDto {
   roomCount!: number;
   guestCount!: number;
   amenities!: Amenity[];
-  owner!: User;
-  commentsCount!: number;
-  coordinates!: Coordinates;
+  owner: User;
+  coordinates: Coordinates;
 }
