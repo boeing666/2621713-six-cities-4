@@ -48,7 +48,7 @@ export class DefaultOfferService implements OfferService {
       .find()
       .limit(count ?? DEFAULT_OFFER_COUNT)
       .sort({ createdAt: DEFAULT_SORT_TYPE })
-      .populate('owner')
+      .populate('user')
       .exec();
 
     return this.getWithFavorites(offers, userId);
@@ -79,7 +79,7 @@ export class DefaultOfferService implements OfferService {
   ): Promise<types.DocumentType<OfferEntity> | null> {
     return this.offerModel
       .findByIdAndUpdate(offerId, dto, { new: true })
-      .populate('owner')
+      .populate('user')
       .exec();
   }
 
@@ -117,7 +117,7 @@ export class DefaultOfferService implements OfferService {
   ): Promise<types.DocumentType<OfferEntity> | null> {
     const comments = await this.commentModel.find({ offerId }).exec();
 
-    const ratings = comments.map((comment) => comment.rate);
+    const ratings = comments.map((comment) => comment.rating);
     const totalRating = ratings.reduce((acc, rating) => acc + rating, 0);
     const avgRating = ratings.length ? totalRating / ratings.length : 0;
 
@@ -152,8 +152,6 @@ export class DefaultOfferService implements OfferService {
     if (!offer) {
       throw new Error('Offer not found');
     }
-
-    offer.isFavorite = true;
 
     return offer;
   }

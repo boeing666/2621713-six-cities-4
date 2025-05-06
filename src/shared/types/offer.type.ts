@@ -9,17 +9,16 @@ export type Offer = {
   description: string;
   image: string;
   date: Date;
-  cost: number;
+  price: number;
   city: City;
-  gallery: string[];
+  images: string[];
   isPremium: boolean;
-  isFavorite: boolean;
   rating: number;
-  apartmentType: HouseType;
+  type: HouseType;
   roomCount: number;
   guestCount: number;
   amenities: Amenity[];
-  owner: User;
+  user: User;
   commentsCount: number;
   coordinates: Coordinates;
 }

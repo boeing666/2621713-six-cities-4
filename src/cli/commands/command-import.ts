@@ -37,15 +37,13 @@ export default class ImportCommand implements Command {
 
     const user = await this.userService.findOrCreate(
       {
-        ...offer.owner,
+        ...offer.user,
         password: DEFAULT_USER_PASSWORD,
       },
       this.salt
     );
 
-    console.info(`User ${user.mail} was created`);
-
-    await this.offerService.create({ ...offer, owner: user });
+    await this.offerService.create({ ...offer, user: user });
   }
 
   public getName(): string {

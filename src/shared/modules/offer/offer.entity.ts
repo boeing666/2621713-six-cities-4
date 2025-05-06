@@ -20,10 +20,10 @@ export interface OfferEntity extends defaultClasses.Base {}
 
 class Coordinates implements CoordinatesType {
   @prop({ required: true, type: Number })
-  public latitude!: number;
+  public latitude: number;
 
   @prop({ required: true, type: Number })
-  public longitude!: number;
+  public longitude: number;
 }
 
 @modelOptions({
@@ -36,55 +36,52 @@ class Coordinates implements CoordinatesType {
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({ trim: true, required: true, type: String })
-  public title!: string;
+  public title: string;
 
   @prop({ trim: true, type: String })
-  public description!: string;
+  public description: string;
 
   @prop({ type: String })
-  public image!: string;
-
-  @prop({ type: Date })
-  public date!: Date;
+  public image: string;
 
   @prop({ type: Number })
-  public cost!: number;
+  public price: number;
 
   @prop({ type: String, enum: City })
-  public city!: City;
+  public city: City;
 
   @prop({ type: [String] })
-  public gallery!: string[];
+  public images: string[];
 
   @prop({ type: Boolean })
-  public isPremium!: boolean;
+  public isPremium: boolean;
 
   @prop({ type: Boolean })
   public isFavorite!: boolean;
 
   @prop({ type: Number })
-  public rating!: number;
+  public rating: number;
 
   @prop({ type: String, enum: HouseType })
-  public type!: HouseType;
+  public type: HouseType;
 
   @prop({ type: Number })
-  public roomsCount!: number;
+  public roomsCount: number;
 
   @prop({ type: Number })
-  public guestCount!: number;
+  public guestCount: number;
 
   @prop({ type: [String], enum: Amenity })
-  public amenities!: Amenity[];
+  public amenities: Amenity[];
 
   @prop({ ref: UserEntity, required: true })
-  public owner!: Ref<UserEntity>;
+  public user: Ref<UserEntity>;
 
   @prop({ type: Number, required: true, default: 0 })
   public commentsCount: number;
 
   @prop({ type: Coordinates, required: true, _id: false })
-  public coordinates!: Coordinates;
+  public coordinates: Coordinates;
 }
 
 export const OfferModel = getModelForClass(OfferEntity);
