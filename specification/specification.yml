@@ -152,7 +152,7 @@ paths:
         required: true
 
       responses:
-        '200':
+        '201':
           description: Предложение успешно создано
           content:
             application/json:
@@ -214,7 +214,7 @@ paths:
         required: true
 
       responses:
-        '200':
+        '201':
           description: Предложение успешно обновлено
           content:
             application/json:
@@ -313,7 +313,7 @@ paths:
             type: string
           description: Идентификатор предложения
       responses:
-        '200':
+        '201':
           description: Предложение успешно добавлено в избранное
           content:
             application/json:
@@ -364,7 +364,7 @@ paths:
         required: true
 
       responses:
-        '200':
+        '201':
           description: Новый комментарий успешно добавлен.
           content:
             application/json:
@@ -408,11 +408,11 @@ components:
       type: object
 
       properties:
-        email:
+        mail:
           type: string
           example: keks@htmlacademy.ru
 
-        avatarUrl:
+        avatar:
           type: string
           example: image.jpg
 
@@ -422,8 +422,8 @@ components:
 
         type:
           type: string
-          enum: [base, pro]
-          example: base
+          enum: [Base, Pro]
+          example: Base
 
         password:
           type: string
@@ -437,11 +437,11 @@ components:
           type: string
           example: 6329c3d6a04ab1061c6425ea
 
-        email:
+        mail:
           type: string
           example: keks@htmlacademy.ru
 
-        avatarUrl:
+        avatar:
           type: string
           example: image.jpg
 
@@ -451,8 +451,8 @@ components:
 
         type:
           type: string
-          enum: [regular, pro]
-          example: regular
+          enum: [Base, Pro]
+          example: Base
 
     createOffer:
       type: object
@@ -466,16 +466,16 @@ components:
           type: string
           example: Big house in the center of the city with all amenities
 
-        previewImage:
+        image:
           type: string
           example: image.jpg
 
-        postDate:
+        date:
           type: string
           format: date
           example: 2025-02-12
 
-        price:
+        cost:
           type: number
           example: 180
 
@@ -484,7 +484,7 @@ components:
           enum: [Paris, Cologne, Brussels, Amsterdam, Hamburg, Dusseldorf]
           example: Paris
 
-        images:
+        gallery:
           type: array
           items:
             type: string
@@ -498,20 +498,20 @@ components:
           type: boolean
           example: true
 
-        rate:
+        rating:
           type: number
           example: 3.8
 
-        type:
+        apartmentType:
           type: string
           enum: [apartment, house, room, hotel]
           example: apartment
 
-        bedrooms:
+        roomCount:
           type: integer
           example: 2
 
-        maxAdults:
+        guestCount:
           type: integer
           example: 4
 
@@ -531,7 +531,7 @@ components:
               ]
             example: [Breakfast, Washer]
 
-        host:
+        owner:
           type: string
           example: 6329c3d6a04ab1061c6425ea
 
@@ -603,11 +603,11 @@ components:
           enum: [apartment, house, room, hotel]
           example: apartment
 
-        bedrooms:
+        roomsCount:
           type: integer
           example: 2
 
-        maxAdults:
+        guestCount:
           type: integer
           example: 4
 
@@ -627,9 +627,13 @@ components:
               ]
             example: [Breakfast, Washer]
 
-        host:
+        owner:
           type: string
           example: 6329c3d6a04ab1061c6425ea
+
+        commentsCount:
+          type: integer
+          example: 1
 
         coordinates:
           type: object

@@ -5,6 +5,7 @@ import {
   Coordinates,
   User
 } from '../../../types/index.js';
+
 export class CreateOfferDto {
   title!: string;
   description!: string;
