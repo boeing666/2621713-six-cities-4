@@ -22,7 +22,6 @@ export class TsvOfferGenerator implements OfferGenerator {
     const previewPath = getRandomItem(this.mockData.houseImages);
     const imagePaths = getRandomItems(this.mockData.houseImages).join(',');
     const isPremium = generateRandomValue(0, 1) ? 'true' : 'false';
-    const isFavorites = generateRandomValue(0, 1) ? 'true' : 'false';
     const rating = generateRandomValue(1, 5);
     const houseType = getRandomItem(Object.values(HouseType));
     const roomsCount = generateRandomValue(1, 8);
@@ -43,7 +42,7 @@ export class TsvOfferGenerator implements OfferGenerator {
 
     return [
       title, description, postDate, city,
-      previewPath, imagePaths, isPremium, isFavorites,
+      previewPath, imagePaths, isPremium,
       rating, houseType, roomsCount, guestCount,
       rentalCost, amenities,
       username, email, avatarPath, userType,

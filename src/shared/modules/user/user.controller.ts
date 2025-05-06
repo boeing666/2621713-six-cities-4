@@ -6,17 +6,24 @@ import { Config, RestSchema } from '../../libs/config/index.js';
 import { fillDTO } from '../../helpers/index.js';
 import { StatusCodes } from 'http-status-codes';
 import { LoginUserRequest } from './login-user-request.type.js';
-import { BaseController, HttpMethod, HttpError } from '../../../rest/libs/index.js';
+import { BaseController, HttpMethod, HttpError, ValidateDtoMiddleware } from '../../../rest/libs/index.js';
 import { UserRdo } from './rdo/user.rdo.js';
 import { Response, Request } from 'express';
 import { UserService } from './user-service.interface.js';
+import { CreateUserDto } from './dto/create-user.dto.js';
+import { LoginUserDto } from './dto/login-user.dto.js';
 
 @injectable()
 export class UserController extends BaseController {
   constructor(
-    @inject(Component.Logger) protected readonly logger: Logger,
-    @inject(Component.UserService) private readonly userService: UserService,
-    @inject(Component.Config) private readonly configService: Config<RestSchema>
+    @inject(Component.Logger)
+    protected readonly logger: Logger,
+
+    @inject(Component.UserService)
+    private readonly userService: UserService,
+
+    @inject(Component.Config)
+    private readonly configService: Config<RestSchema>
   ) {
     super(logger);
     this.logger.info('Register routes for UserController...');
@@ -25,12 +32,14 @@ export class UserController extends BaseController {
       path: '/register',
       method: HttpMethod.Post,
       handler: this.create,
+      middlewares: [new ValidateDtoMiddleware(CreateUserDto)],
     });
 
     this.addRoute({
       path: '/login',
       method: HttpMethod.Post,
       handler: this.login,
+      middlewares: [new ValidateDtoMiddleware(LoginUserDto)],
     });
 
     this.addRoute({

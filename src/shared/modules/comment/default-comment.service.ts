@@ -20,7 +20,7 @@ export class DefaultCommentService implements CommentService {
     dto: CreateCommentDto
   ): Promise<DocumentType<CommentEntity>> {
     const comment = await this.commentModel.create(dto);
-    return comment.populate('author');
+    return comment.populate('userId');
   }
 
   public async findByOfferId(
@@ -33,7 +33,7 @@ export class DefaultCommentService implements CommentService {
       .find({ offerId })
       .limit(limit)
       .sort({ createdAt: DEFAULT_SORT_TYPE })
-      .populate('author');
+      .populate('userId');
   }
 
   public async deleteByOfferId(offerId: string): Promise<number> {

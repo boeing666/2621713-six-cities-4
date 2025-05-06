@@ -12,13 +12,13 @@ export class OfferRdo {
   @Expose()
   public description: string;
 
-  @Expose({ name: 'date' })
+  @Expose({ name: 'createdAt' })
   public postDate: string;
 
   @Expose({ name: 'image' })
-  public previewImage: string;
+  public image: string;
 
-  @Expose({ name: 'gallery' })
+  @Expose({ name: 'images' })
   public images: string[];
 
   @Expose()
@@ -50,10 +50,7 @@ export class OfferRdo {
 
   @Expose()
   @Type(() => UserRdo)
-  public owner: UserRdo;
-
-  @Expose()
-  public commentsCount: number;
+  public user: UserRdo;
 
   @Expose()
   @Type(() => Coordinates)
