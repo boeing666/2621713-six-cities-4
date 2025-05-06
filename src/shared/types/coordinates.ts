@@ -1,4 +1,9 @@
-export type Coordinates = {
-  latitude: number;
-  longitude: number;
-};
+import { Expose } from 'class-transformer';
+
+export class Coordinates {
+  @Expose()
+  public latitude: number;
+
+  @Expose()
+  public longitude: number;
+}
