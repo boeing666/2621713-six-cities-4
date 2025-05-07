@@ -6,7 +6,7 @@ import { Config, RestSchema } from '../../libs/config/index.js';
 import { fillDTO } from '../../helpers/index.js';
 import { StatusCodes } from 'http-status-codes';
 import { LoginUserRequest } from './login-user-request.type.js';
-import { BaseController, HttpMethod, HttpError, ValidateDtoMiddleware } from '../../../rest/libs/index.js';
+import { BaseController, HttpMethod, HttpError, ValidateDtoMiddleware, DocumentExistsMiddleware, UploadFileMiddleware, ValidateObjectIdMiddleware } from '../../../rest/libs/index.js';
 import { UserRdo } from './rdo/user.rdo.js';
 import { Response, Request } from 'express';
 import { UserService } from './user-service.interface.js';
@@ -52,6 +52,20 @@ export class UserController extends BaseController {
       path: '/logout',
       method: HttpMethod.Post,
       handler: this.logout,
+    });
+
+    this.addRoute({
+      path: '/:userId/avatar',
+      method: HttpMethod.Post,
+      handler: this.uploadAvatar,
+      middlewares: [
+        new ValidateObjectIdMiddleware('userId'),
+        new DocumentExistsMiddleware(this.userService, 'User', 'userId'),
+        new UploadFileMiddleware(
+          this.configService.get('UPLOAD_DIRECTORY'),
+          'avatar'
+        ),
+      ],
     });
   }
 
@@ -118,5 +132,11 @@ export class UserController extends BaseController {
 
   public async logout(_req: Request, res: Response): Promise<void> {
     this.noContent(res, {});
+  }
+
+  public async uploadAvatar(req: Request, res: Response) {
+    this.created(res, {
+      filepath: req.file?.path
+    });
   }
 }
