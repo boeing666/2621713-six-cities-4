@@ -656,16 +656,15 @@ components:
           minLength: 5
           maxLength: 1024
 
-        postDate:
-          type: string
-          format: date
-          example: 2025-02-12
-
         rating:
           type: number
           example: 3.8
 
-        author:
+        offerId:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+
+        userId:
           type: string
           example: 6329c3d6a04ab1061c6425ea
 

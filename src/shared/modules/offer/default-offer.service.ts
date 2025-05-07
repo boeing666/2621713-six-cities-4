@@ -139,18 +139,18 @@ export class DefaultOfferService implements OfferService {
     userId: string,
     offerId: string
   ): Promise<types.DocumentType<OfferEntity>> {
+    const offer = await this.offerModel.findById(offerId).exec();
+
+    if (!offer) {
+      throw new Error('Offer not found');
+    }
+
     const existing = await this.favoriteModel
       .findOne({ userId, offerId })
       .exec();
 
     if (!existing) {
       await this.favoriteModel.create({ userId, offerId });
-    }
-
-    const offer = await this.offerModel.findById(offerId).exec();
-
-    if (!offer) {
-      throw new Error('Offer not found');
     }
 
     return offer;

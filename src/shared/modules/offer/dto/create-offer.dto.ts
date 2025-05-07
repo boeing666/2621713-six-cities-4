@@ -78,7 +78,7 @@ export class CreateOfferDto {
 
   @IsNotEmpty()
   @IsMongoId({ message: CreateOfferValidationMessage.userId.invalidId })
-  public user: User;
+  public user: string;
 
   @IsNotEmpty()
   @IsInt()

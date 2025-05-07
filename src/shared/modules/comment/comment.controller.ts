@@ -6,7 +6,7 @@ import { Logger } from '../../libs/logger/index.js';
 import { CommentService } from './comment-service.interface.js';
 import { OfferService } from '../offer/index.js';
 import { fillDTO } from '../../helpers/index.js';
-import { BaseController, HttpMethod, ValidateDtoMiddleware, HttpError } from '../../../rest/libs/index.js';
+import { BaseController, HttpMethod, ValidateDtoMiddleware, HttpError, PrivateRouteMiddleware } from '../../../rest/libs/index.js';
 import { CreateCommentDto } from './dto/create-comment.dto.js';
 import { CreateCommentRequest } from './types/create-comment-request.type.js';
 import { CommentRdo } from './rdo/comment.rdo.js';
@@ -14,10 +14,14 @@ import { CommentRdo } from './rdo/comment.rdo.js';
 @injectable()
 export default class CommentController extends BaseController {
   constructor(
-    @inject(Component.Logger) protected readonly logger: Logger,
+    @inject(Component.Logger)
+    protected readonly logger: Logger,
+
     @inject(Component.CommentService)
     private readonly commentService: CommentService,
-    @inject(Component.OfferService) private readonly offerService: OfferService
+
+    @inject(Component.OfferService)
+    private readonly offerService: OfferService
   ) {
     super(logger);
 
@@ -26,12 +30,15 @@ export default class CommentController extends BaseController {
       path: '/',
       method: HttpMethod.Post,
       handler: this.create,
-      middlewares: [new ValidateDtoMiddleware(CreateCommentDto)],
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateDtoMiddleware(CreateCommentDto),
+      ],
     });
   }
 
   public async create(
-    { body }: CreateCommentRequest,
+    { body, tokenPayload }: CreateCommentRequest,
     res: Response
   ): Promise<void> {
     if (!(await this.offerService.exists(body.offerId))) {
@@ -42,7 +49,7 @@ export default class CommentController extends BaseController {
       );
     }
 
-    const comment = await this.commentService.create(body);
+    const comment = await this.commentService.create({...body, userId: tokenPayload.id});
     await this.offerService.incCommentCount(body.offerId);
     this.created(res, fillDTO(CommentRdo, comment));
   }
