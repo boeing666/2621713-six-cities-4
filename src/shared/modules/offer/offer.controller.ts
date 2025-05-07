@@ -5,13 +5,14 @@ import { Logger } from '../../libs/logger/index.js';
 import { City, Component } from '../../types/index.js';
 import { DEFAULT_OFFER_COUNT } from './offer.constant.js';
 import { StatusCodes } from 'http-status-codes';
-import { BaseController, DocumentExistsMiddleware, HttpError, HttpMethod, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../../rest/libs/index.js';
+import { BaseController, CheckOwnerMiddleware, DocumentExistsMiddleware, HttpError, HttpMethod, PrivateRouteMiddleware, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../../rest/libs/index.js';
 import { CreateOfferDto, OfferRdo, OfferService } from './index.js';
 import { CreateOfferRequest } from './create-offer-request.type.js';
 import { fillDTO } from '../../helpers/common.js';
 import { ParamOfferId } from './types/param-offerid.type.js';
 import { CommentRdo, CommentService } from '../comment/index.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
+import { ParamCity } from './types/param-city.type.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -39,7 +40,10 @@ export class OfferController extends BaseController {
       path: '/',
       method: HttpMethod.Post,
       handler: this.create,
-      middlewares: [new ValidateDtoMiddleware(CreateOfferDto)],
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateDtoMiddleware(CreateOfferDto),
+      ],
     });
 
     this.addRoute({
@@ -57,9 +61,11 @@ export class OfferController extends BaseController {
       method: HttpMethod.Patch,
       handler: this.update,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new ValidateDtoMiddleware(UpdateOfferDto),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
+        new CheckOwnerMiddleware(this.offerService),
       ],
     });
 
@@ -68,8 +74,10 @@ export class OfferController extends BaseController {
       method: HttpMethod.Delete,
       handler: this.delete,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
+        new CheckOwnerMiddleware(this.offerService),
       ],
     });
 
@@ -83,6 +91,7 @@ export class OfferController extends BaseController {
       path: '/favorites',
       method: HttpMethod.Get,
       handler: this.getFavorites,
+      middlewares: [new PrivateRouteMiddleware()],
     });
 
     this.addRoute({
@@ -90,6 +99,7 @@ export class OfferController extends BaseController {
       method: HttpMethod.Post,
       handler: this.addFavorite,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
       ],
@@ -100,6 +110,7 @@ export class OfferController extends BaseController {
       method: HttpMethod.Delete,
       handler: this.removeFavorite,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
       ],
@@ -124,15 +135,18 @@ export class OfferController extends BaseController {
   }
 
   public async create(
-    { body } : CreateOfferRequest,
+    { body, tokenPayload }: CreateOfferRequest,
     res: Response
   ): Promise<void> {
-    const result = await this.offerService.create(body);
+    const result = await this.offerService.create({
+      ...body,
+      user: tokenPayload.id,
+    });
     this.created(res, fillDTO(OfferRdo, result));
   }
 
-  async show(req: Request, res: Response) {
-    const offer = await this.offerService.findById(req.params.offerId);
+  async show({ params, tokenPayload }: Request<ParamOfferId>, res: Response) {
+    const offer = await this.offerService.findById(params.offerId, tokenPayload.id);
     this.ok(res, fillDTO(OfferRdo, offer));
   }
 
@@ -145,39 +159,40 @@ export class OfferController extends BaseController {
     this.ok(res, fillDTO(OfferRdo, updatedOffer));
   }
 
-  async delete(req: Request, res: Response) {
-    const offerId = req.params.offerId;
-    const offer = await this.offerService.deleteById(offerId);
-    await this.commentService.deleteByOfferId(offerId);
+  async delete({ params }: Request<ParamOfferId>, res: Response) {
+    const offer = await this.offerService.deleteById(params.offerId);
+    await this.commentService.deleteByOfferId(params.offerId);
     this.noContent(res, offer);
   }
 
-  async getPremium(req: Request, res: Response) {
-    const city = req.params.city as City;
+  async getPremium(
+    { params, tokenPayload }: Request<ParamCity>,
+    res: Response
+  ) {
     const offers = await this.offerService.findPremiumOffersByCity(
-      city,
-      req.body?.userId
+      params.city as City,
+      tokenPayload.id
     );
     this.ok(res, fillDTO(OfferRdo, offers));
   }
 
-  async getFavorites(req: Request, res: Response) {
-    const offers = await this.offerService.getUserFavorites(req.body?.userId);
+  async getFavorites({ tokenPayload }: Request, res: Response) {
+    const offers = await this.offerService.getUserFavorites(tokenPayload.id);
     this.ok(res, fillDTO(OfferRdo, offers));
   }
 
-  async addFavorite(req: Request, res: Response) {
+  async addFavorite({ params, tokenPayload }: Request, res: Response) {
     const offer = await this.offerService.addFavorite(
-      req.params.offerId,
-      req.body?.userId
+      tokenPayload.id,
+      params.offerId
     );
     this.created(res, fillDTO(OfferRdo, offer));
   }
 
-  async removeFavorite(req: Request, res: Response) {
+  async removeFavorite({ params, tokenPayload }: Request, res: Response) {
     await this.offerService.deleteFavorite(
-      req.params.offerId,
-      req.body?.userId
+      tokenPayload.id,
+      params.offerId
     );
     this.noContent(res, {});
   }
