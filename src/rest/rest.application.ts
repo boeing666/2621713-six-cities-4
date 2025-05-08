@@ -7,6 +7,8 @@ import { DatabaseClient } from '../shared/libs/database-client/database-client.i
 import { getMongoURI } from '../shared/helpers/database.js';
 import { Controller, ExceptionFilter } from './libs/index.js';
 import { ParseTokenMiddleware } from './libs/middleware/parse-token.middleware.js';
+import { STATIC_FILES_ROUTE, STATIC_UPLOAD_ROUTE } from './rest.constant.js';
+import cors from 'cors';
 
 @injectable()
 export class RestApplication {
@@ -72,18 +74,23 @@ export class RestApplication {
   }
 
   private async _initMiddleware() {
+    this.server.use(express.json());
+    this.server.use(
+      STATIC_UPLOAD_ROUTE,
+      express.static(this.config.get('UPLOAD_DIRECTORY'))
+    );
+    this.server.use(
+      STATIC_FILES_ROUTE,
+      express.static(this.config.get('STATIC_DIRECTORY_PATH'))
+    );
+
     const authenticateMiddleware = new ParseTokenMiddleware(
       this.config.get('JWT_SECRET')
     );
-
-    this.server.use(express.json());
     this.server.use(
       authenticateMiddleware.execute.bind(authenticateMiddleware)
     );
-    this.server.use(
-      '/upload',
-      express.static(this.config.get('UPLOAD_DIRECTORY'))
-    );
+    this.server.use(cors());
   }
 
   private async _initControllers() {
