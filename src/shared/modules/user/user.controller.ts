@@ -54,12 +54,6 @@ export class UserController extends BaseController {
     });
 
     this.addRoute({
-      path: '/logout',
-      method: HttpMethod.Post,
-      handler: this.logout,
-    });
-
-    this.addRoute({
       path: '/:userId/avatar',
       method: HttpMethod.Post,
       handler: this.uploadAvatar,
@@ -124,10 +118,6 @@ export class UserController extends BaseController {
     }
 
     this.ok(res, fillDTO(LoggedUserRdo, foundedUser));
-  }
-
-  public async logout(_req: Request, res: Response): Promise<void> {
-    this.noContent(res, {});
   }
 
   public async uploadAvatar(req: Request, res: Response) {

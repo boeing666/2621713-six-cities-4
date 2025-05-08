@@ -346,7 +346,7 @@ paths:
         '404':
           description: Предложение не найдено
 
-  /offers/{offerId}/comments:
+  /comments/{offerId}:
     get:
       tags:
         - comments
@@ -372,8 +372,6 @@ paths:
                   $ref: '#/components/schemas/comment'
         '404':
           description: Предложение не найдено
-
-  /comments:
     post:
       tags:
         - comments
