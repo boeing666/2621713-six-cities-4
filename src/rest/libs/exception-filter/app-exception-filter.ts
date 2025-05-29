@@ -9,7 +9,10 @@ import { createErrorObject } from '../../../shared/helpers/index.js';
 
 @injectable()
 export class AppExceptionFilter implements ExceptionFilter {
-  constructor(@inject(Component.Logger) private readonly logger: Logger) {
+  constructor(
+    @inject(Component.Logger)
+    private readonly logger: Logger
+  ) {
     this.logger.info('Register AppExceptionFilter');
   }
 

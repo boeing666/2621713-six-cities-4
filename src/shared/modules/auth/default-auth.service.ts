@@ -14,10 +14,17 @@ import { TokenPayload } from './types/TokenPayload.js';
 @injectable()
 export class DefaultAuthService implements AuthService {
   constructor(
-    @inject(Component.Logger) private readonly logger: Logger,
-    @inject(Component.UserService) private readonly userService: UserService,
-    @inject(Component.Config) private readonly config: Config<RestSchema>
-  ) {}
+    @inject(Component.Logger)
+    private readonly logger: Logger,
+
+    @inject(Component.UserService)
+    private readonly userService: UserService,
+
+    @inject(Component.Config)
+    private readonly config: Config<RestSchema>
+  ) {
+
+  }
 
   public async authenticate(user: UserEntity): Promise<string> {
     const jwtSecret = this.config.get('JWT_SECRET');

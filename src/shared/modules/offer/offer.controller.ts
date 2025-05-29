@@ -4,13 +4,12 @@ import { Request, Response } from 'express';
 import { Logger } from '../../libs/logger/index.js';
 import { City, Component } from '../../types/index.js';
 import { DEFAULT_OFFER_COUNT } from './offer.constant.js';
-import { StatusCodes } from 'http-status-codes';
-import { BaseController, CheckOwnerMiddleware, DocumentExistsMiddleware, HttpError, HttpMethod, PrivateRouteMiddleware, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../../rest/libs/index.js';
+import { BaseController, CheckOwnerMiddleware, DocumentExistsMiddleware, HttpMethod, PrivateRouteMiddleware, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../../rest/libs/index.js';
 import { CreateOfferDto, OfferRdo, OfferService } from './index.js';
 import { CreateOfferRequest } from './create-offer-request.type.js';
 import { fillDTO } from '../../helpers/common.js';
 import { ParamOfferId } from './types/param-offerid.type.js';
-import { CommentRdo, CommentService } from '../comment/index.js';
+import { CommentService } from '../comment/index.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import { ParamCity } from './types/param-city.type.js';
 

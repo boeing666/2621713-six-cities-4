@@ -8,7 +8,9 @@ export class UploadFileMiddleware implements Middleware {
   constructor(
     private uploadDirectory: string,
     private fieldName: string,
-  ) {}
+  ) {
+
+  }
 
   public async execute(req: Request, res: Response, next: NextFunction): Promise<void> {
     const storage = diskStorage({

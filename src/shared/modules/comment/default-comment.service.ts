@@ -14,7 +14,9 @@ export class DefaultCommentService implements CommentService {
   constructor(
     @inject(Component.CommentModel)
     private readonly commentModel: types.ModelType<CommentEntity>
-  ) {}
+  ) {
+
+  }
 
   public async create(
     dto: CreateCommentDto

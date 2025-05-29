@@ -1,9 +1,9 @@
 import dayjs from 'dayjs';
 
-import {City, Amenity, HouseType, MockServerData, UserType} from '../../types/index.js';
-import {generateRandomValue, getRandomItem, getRandomItems} from '../../helpers/index.js';
+import { City, Amenity, HouseType, MockServerData, UserType } from '../../types/index.js';
+import { generateRandomValue, getRandomItem, getRandomItems } from '../../helpers/index.js';
 
-import {OfferGenerator} from './offer-generator.interface.js';
+import { OfferGenerator} from './offer-generator.interface.js';
 
 const MIN_PRICE = 100;
 const MAX_PRICE = 100_000;
@@ -12,7 +12,11 @@ const FIRST_WEE_DAY = 1;
 const LAST_WEE_DAY = 7;
 
 export class TsvOfferGenerator implements OfferGenerator {
-  constructor(private readonly mockData: MockServerData) {}
+  constructor(
+    private readonly mockData: MockServerData
+  ) {
+
+  }
 
   public generate(): string {
     const title = getRandomItem(this.mockData.title);

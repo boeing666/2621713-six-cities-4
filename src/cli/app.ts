@@ -9,7 +9,7 @@ import url from 'node:url';
 
 type CommandCollection = Map<string, Command>;
 
-export class CLIApplication {
+export class CliApplication {
   private commands: CommandCollection = new Map();
 
   constructor(

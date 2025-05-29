@@ -30,7 +30,9 @@ export class DefaultOfferService implements OfferService {
 
     @inject(Component.CommentModel)
     private readonly commentModel: types.ModelType<CommentEntity>
-  ) {}
+  ) {
+
+  }
 
   public async create(
     dto: CreateOfferDto

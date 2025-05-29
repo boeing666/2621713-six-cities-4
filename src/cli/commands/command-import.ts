@@ -13,7 +13,6 @@ import { Offer } from '../../shared/types/index.js';
 import { CommentModel } from '../../shared/modules/comment/comment.entity.js';
 import { FavoriteModel } from '../../shared/modules/favorite/favorite.entity.js';
 import { OfferModel, OfferService } from '../../shared/modules/offer/index.js';
-import { DEFAULT_USER_PASSWORD } from './command.constant.js';
 
 export default class ImportCommand implements Command {
   private userService: UserService;
@@ -35,15 +34,17 @@ export default class ImportCommand implements Command {
   private async saveOffer(offer: Offer) {
     console.info(`Importing offer ${offer.title}...`);
 
+    const randomPassword = Math.random().toString(36).slice(-8);
+
     const user = await this.userService.findOrCreate(
       {
         ...offer.user,
-        password: DEFAULT_USER_PASSWORD,
+        password: randomPassword,
       },
       this.salt
     );
 
-    await this.offerService.create({ ...offer, user: user });
+    await this.offerService.create({ ...offer, user: user.id });
   }
 
   public getName(): string {
@@ -62,8 +63,8 @@ export default class ImportCommand implements Command {
   }
 
   public async execute(_parameters: string[]) {
-    const [filename, login, password, port, dbname, salt] = _parameters;
-    const uri = getMongoURI(login, password, port, dbname);
+    const [filename, host, login, password, port, dbname, salt] = _parameters;
+    const uri = getMongoURI(host, login, password, port, dbname);
     this.salt = salt;
 
     await this.databaseClient.connect(uri);

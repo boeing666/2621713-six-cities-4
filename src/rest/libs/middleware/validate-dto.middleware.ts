@@ -5,7 +5,11 @@ import { StatusCodes } from 'http-status-codes';
 import { Middleware } from '../index.js';
 
 export class ValidateDtoMiddleware implements Middleware {
-  constructor(private dto: ClassConstructor<object>) {}
+  constructor(
+    private dto: ClassConstructor<object>
+  ) {
+
+  }
 
   public async execute(
     { body }: Request,
