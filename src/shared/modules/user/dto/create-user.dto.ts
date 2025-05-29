@@ -5,7 +5,7 @@ import { CREATE_USER_MESSAGES } from './create-user.messages.js';
 export class CreateUserDto {
   @IsNotEmpty({ message: CREATE_USER_MESSAGES.email.invalidFormat })
   @IsEmail({}, { message: CREATE_USER_MESSAGES.email.invalidFormat })
-  public mail: string;
+  public email: string;
 
   @IsNotEmpty({ message: CREATE_USER_MESSAGES.name.invalidFormat })
   @IsString({ message: CREATE_USER_MESSAGES.name.invalidFormat })

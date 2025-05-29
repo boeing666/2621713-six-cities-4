@@ -30,13 +30,13 @@ export class DefaultAuthService implements AuthService {
     const jwtSecret = this.config.get('JWT_SECRET');
     const secretKey = crypto.createSecretKey(jwtSecret, 'utf-8');
     const tokenPayload: TokenPayload = {
-      email: user.mail,
+      email: user.email,
       name: user.name,
       type: user.type,
       id: user.id,
     };
 
-    this.logger.info(`Create token for ${user.mail}`);
+    this.logger.info(`Create token for ${user.email}`);
     return new SignJWT(tokenPayload)
       .setProtectedHeader({ alg: JWT_ALGORITHM })
       .setIssuedAt()

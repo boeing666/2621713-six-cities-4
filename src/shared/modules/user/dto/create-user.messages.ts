@@ -11,7 +11,7 @@ export const CREATE_USER_MESSAGES = {
     lengthField: 'Имя должно содержать от 1 до 15 символов.',
   },
   type: {
-    invalidType: 'Недопустимый тип пользователя. Допустимые значения: обычный, pro.',
+    invalidType: 'Недопустимый тип пользователя. Допустимые значения: Base, Pro',
   },
   password: {
     invalidFormat: 'Пароль обязателен и должен быть строкой.',

@@ -36,7 +36,7 @@ export const configRestSchema = convict<RestSchema>({
     doc: 'IP address of the database server (MongoDB)',
     format: 'ipaddress',
     env: 'DB_HOST',
-    default: 'localhost',
+    default: '127.0.0.1',
   },
   DB_USER: {
     doc: 'Username to connect to the database',

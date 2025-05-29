@@ -24,7 +24,7 @@ export function createOffer(offerData: string): Offer {
     rentalCost,
     amenities,
     username,
-    mail,
+    email,
     avatar,
     userType,
     commentsCount,
@@ -38,7 +38,7 @@ export function createOffer(offerData: string): Offer {
 
   const user: User = {
     name: username,
-    mail,
+    email,
     avatar,
     type: UserType[userType as keyof typeof UserType] ?? undefined,
   };

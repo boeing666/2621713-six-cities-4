@@ -406,7 +406,7 @@ components:
       type: object
 
       properties:
-        mail:
+        email:
           type: string
           example: keks@htmlacademy.ru
 
@@ -435,7 +435,7 @@ components:
           type: string
           example: 6329c3d6a04ab1061c6425ea
 
-        mail:
+        email:
           type: string
           example: keks@htmlacademy.ru
 
