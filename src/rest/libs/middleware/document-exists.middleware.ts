@@ -9,7 +9,9 @@ export class DocumentExistsMiddleware implements Middleware {
     private readonly service: DocumentExists,
     private readonly entityName: string,
     private readonly paramName: string
-  ) {}
+  ) {
+
+  }
 
   public async execute(
     { params }: Request,
@@ -17,6 +19,7 @@ export class DocumentExistsMiddleware implements Middleware {
     next: NextFunction
   ): Promise<void> {
     const documentId = params[this.paramName];
+
     if (!(await this.service.exists(documentId))) {
       throw new HttpError(
         StatusCodes.NOT_FOUND,

@@ -7,7 +7,6 @@ import { DatabaseClient } from '../shared/libs/database-client/database-client.i
 import { getMongoURI } from '../shared/helpers/database.js';
 import { Controller, ExceptionFilter } from './libs/index.js';
 import { ParseTokenMiddleware } from './libs/middleware/parse-token.middleware.js';
-import { STATIC_FILES_ROUTE, STATIC_UPLOAD_ROUTE } from './rest.constant.js';
 import cors from 'cors';
 
 @injectable()
@@ -63,6 +62,7 @@ export class RestApplication {
 
     this.logger.info('Try to init server');
     await this._initServer();
+
     this.logger.info(
       `Server started on http://localhost:${this.config.get('PORT')}`
     );
@@ -75,21 +75,25 @@ export class RestApplication {
 
   private async _initMiddleware() {
     this.server.use(express.json());
+
     this.server.use(
-      STATIC_UPLOAD_ROUTE,
+      this.config.get('STATIC_UPLOAD_ROUTE'),
       express.static(this.config.get('UPLOAD_DIRECTORY'))
     );
+
     this.server.use(
-      STATIC_FILES_ROUTE,
+      this.config.get('STATIC_FILES_ROUTE'),
       express.static(this.config.get('STATIC_DIRECTORY_PATH'))
     );
 
     const authenticateMiddleware = new ParseTokenMiddleware(
       this.config.get('JWT_SECRET')
     );
+
     this.server.use(
       authenticateMiddleware.execute.bind(authenticateMiddleware)
     );
+
     this.server.use(cors());
   }
 
@@ -110,6 +114,7 @@ export class RestApplication {
 
   private async _initDb() {
     const mongoUri = getMongoURI(
+      this.config.get('DB_HOST'),
       this.config.get('DB_USER'),
       this.config.get('DB_PASSWORD'),
       this.config.get('DB_PORT'),
