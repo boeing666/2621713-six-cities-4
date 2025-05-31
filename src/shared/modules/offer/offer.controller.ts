@@ -46,6 +46,19 @@ export class OfferController extends BaseController {
     });
 
     this.addRoute({
+      path: '/favorites',
+      method: HttpMethod.Get,
+      handler: this.getFavorites,
+      middlewares: [new PrivateRouteMiddleware()],
+    });
+
+    this.addRoute({
+      path: '/:city/premium',
+      method: HttpMethod.Get,
+      handler: this.getPremium,
+    });
+
+    this.addRoute({
       path: '/:offerId',
       method: HttpMethod.Get,
       handler: this.show,
@@ -78,19 +91,6 @@ export class OfferController extends BaseController {
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
         new CheckOwnerMiddleware(this.offerService),
       ],
-    });
-
-    this.addRoute({
-      path: '/:city/premium',
-      method: HttpMethod.Get,
-      handler: this.getPremium,
-    });
-
-    this.addRoute({
-      path: '/favorites',
-      method: HttpMethod.Get,
-      handler: this.getFavorites,
-      middlewares: [new PrivateRouteMiddleware()],
     });
 
     this.addRoute({

@@ -1,4 +1,4 @@
-import { IsNotEmpty, MinLength, MaxLength, ArrayMaxSize, ArrayMinSize, IsArray, IsEnum, IsBoolean, IsInt, Max, Min, IsMongoId } from 'class-validator';
+import { IsNotEmpty, MinLength, MaxLength, ArrayMaxSize, ArrayMinSize, IsArray, IsEnum, IsBoolean, IsInt, Max, Min, IsMongoId, IsString } from 'class-validator';
 import {
   City,
   Amenity,
@@ -75,13 +75,11 @@ export class CreateOfferDto {
   @ArrayMinSize(1, { message: CreateOfferMessages.amenities.minSize })
   public amenities: Amenity[];
 
-  @IsNotEmpty()
-  @IsMongoId({ message: CreateOfferMessages.userId.invalidId })
+  @IsString()
   public user: string;
 
-  @IsNotEmpty()
   @IsInt()
-  public commentsCount: number;
+  public commentsCount: number = 0;
 
   @IsNotEmpty()
   public coordinates: Coordinates;

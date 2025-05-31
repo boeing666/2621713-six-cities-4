@@ -28,7 +28,7 @@ export class TsvOfferGenerator implements OfferGenerator {
     const isPremium = generateRandomValue(0, 1) ? 'true' : 'false';
     const rating = generateRandomValue(1, 5);
     const houseType = getRandomItem(Object.values(HouseType));
-    const roomsCount = generateRandomValue(1, 8);
+    const roomCount = generateRandomValue(1, 8);
     const guestCount = generateRandomValue(1, 8);
     const rentalCost = generateRandomValue(MIN_PRICE, MAX_PRICE);
     const amenities = getRandomItems(Object.values(Amenity));
@@ -47,7 +47,7 @@ export class TsvOfferGenerator implements OfferGenerator {
     return [
       title, description, postDate, city,
       previewPath, imagePaths, isPremium,
-      rating, houseType, roomsCount, guestCount,
+      rating, houseType, roomCount, guestCount,
       rentalCost, amenities,
       username, email, avatarPath, userType,
       commentsCount, coordinates

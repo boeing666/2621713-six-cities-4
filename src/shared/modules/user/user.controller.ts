@@ -98,7 +98,6 @@ export class UserController extends BaseController {
     const user = await this.authService.verify(body);
     const token = await this.authService.authenticate(user);
     const responseData = fillDTO(LoggedUserRdo, {
-      email: user.email,
       token,
     });
     this.ok(res, responseData);
@@ -116,8 +115,6 @@ export class UserController extends BaseController {
         'UserController'
       );
     }
-
-    console.log('foundedUser', foundedUser);
 
     this.ok(res, fillDTO(LoggedUserRdo, foundedUser));
   }
