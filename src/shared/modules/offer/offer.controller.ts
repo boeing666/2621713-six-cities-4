@@ -135,7 +135,7 @@ export class OfferController extends BaseController {
   }
 
   async show({ params, tokenPayload }: Request<ParamOfferId>, res: Response) {
-    const offer = await this.offerService.findById(params.offerId, tokenPayload.id);
+    const offer = await this.offerService.findById(params.offerId, tokenPayload?.id);
     this.ok(res, fillDTO(OfferRdo, offer));
   }
 
@@ -160,7 +160,7 @@ export class OfferController extends BaseController {
   ) {
     const offers = await this.offerService.findPremiumOffersByCity(
       params.city as City,
-      tokenPayload.id
+      tokenPayload?.id
     );
     this.ok(res, fillDTO(OfferRdo, offers));
   }

@@ -76,7 +76,7 @@ export class CreateOfferDto {
   public amenities: Amenity[];
 
   @IsString()
-  public user: string;
+  public user: string = '';
 
   @IsInt()
   public commentsCount: number = 0;
