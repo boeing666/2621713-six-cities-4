@@ -1,9 +1,9 @@
 import got from 'got';
 
-import {Command} from './interface.js';
-import {MockServerData} from '../../shared/types/index.js';
-import {TsvFileWriter} from '../../shared/libs/file-writer/index.js';
-import {TsvOfferGenerator} from '../../shared/libs/offer-generator/index.js';
+import { Command } from './interface.js';
+import { MockServerData } from '../../shared/types/index.js';
+import { TsvFileWriter } from '../../shared/libs/file-writer/index.js';
+import { TsvOfferGenerator } from '../../shared/libs/offer-generator/index.js';
 
 export default class GenerateCommand implements Command {
   private initialData: MockServerData;

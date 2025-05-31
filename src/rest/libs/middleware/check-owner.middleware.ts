@@ -10,7 +10,9 @@ export class CheckOwnerMiddleware implements Middleware {
   constructor(
     @inject(Component.OfferService)
     private readonly offerService: OfferService
-  ) {}
+  ) {
+
+  }
 
   public async execute(
     req: Request,
